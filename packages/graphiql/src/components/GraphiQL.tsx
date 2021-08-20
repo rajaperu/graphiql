@@ -150,6 +150,7 @@ export type GraphiQLState = {
   operations?: OperationDefinitionNode[];
   documentAST?: DocumentNode;
   maxHistoryLength: number;
+  isFullScreen?: boolean;
 };
 
 /**
@@ -192,6 +193,8 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
   editorBarComponent: Maybe<HTMLDivElement>;
   queryEditorComponent: Maybe<QueryEditor>;
   resultViewerElement: Maybe<HTMLElement>;
+  graphiqlDivElement: Maybe<HTMLElement> | null;
+  embeddedGraphiqlDivElement: Maybe<HTMLElement> | null;
 
   constructor(props: GraphiQLProps) {
     super(props);
@@ -266,6 +269,17 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     const headerEditorEnabled = props.headerEditorEnabled ?? false;
     const shouldPersistHeaders = props.shouldPersistHeaders ?? false;
 
+    let isFullScreenOn = false;
+    // Check if the window is already in full screen mode
+    this.embeddedGraphiqlDivElement = document.getElementById(
+      "embedded-graphiql-container"
+    );
+    this.graphiqlDivElement = document.getElementById("graphiql");
+    if (this.embeddedGraphiqlDivElement && this.graphiqlDivElement) {
+      const graphiqlDivElementHeight = this.graphiqlDivElement.style.height;
+      isFullScreenOn = graphiqlDivElementHeight.indexOf("100") ? true : false;
+    }
+
     // Initialize state
     this.state = {
       schema: props.schema,
@@ -274,6 +288,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
       headers: headers as string,
       operationName,
       docExplorerOpen,
+      isFullScreen: isFullScreenOn,
       response: props.response,
       editorFlex: Number(this._storage.get("editorFlex")) || 1,
       secondaryEditorOpen,
@@ -421,9 +436,80 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
   render() {
     const children = React.Children.toArray(this.props.children);
 
-    const logo = find(children, (child) =>
-      isChildComponentType(child, GraphiQL.Logo)
-    ) || <GraphiQL.Logo />;
+    const createFullScreenButton = (
+      <button
+        className="toolbar-button-full-screen"
+        onClick={this.handleFullScreen}
+        aria-invalid="false"
+        title="Full Screen"
+      >
+        <svg
+          width="24"
+          height="24"
+          xmlns="http://www.w3.org/2000/svg"
+          overflow="hidden"
+        >
+          <defs>
+            <clipPath id="clip0">
+              <rect x="628" y="348" width="24" height="24" />
+            </clipPath>
+          </defs>
+          <g clipPath="url(#clip0)" transform="translate(-628 -348)">
+            <path
+              d="M633 353 638 353 638 351 631 351 631 358 633 358ZM638 367 633 367 633 362 631 362 631 369 638 369ZM649 362 647 362 647 367 642 367 642 369 649 369ZM647 358 649 358 649 351 642 351 642 353 647 353Z"
+              fill="#000000"
+              fillRule="nonzero"
+              fillOpacity="1"
+            />
+          </g>
+        </svg>
+      </button>
+    );
+
+    const createExitFullScreenButton = (
+      <button
+        className="toolbar-button-exit-full-screen"
+        onClick={this.handleExitFullScreen}
+        aria-invalid="false"
+        title="Exit Full Screen"
+      >
+        <svg
+          width="24"
+          height="25"
+          xmlns="http://www.w3.org/2000/svg"
+          overflow="hidden"
+        >
+          <defs>
+            <clipPath id="clip0">
+              <rect x="680" y="237" width="24" height="25" />
+            </clipPath>
+            <clipPath id="clip1">
+              <rect x="680" y="238" width="24" height="24" />
+            </clipPath>
+            <clipPath id="clip2">
+              <rect x="680" y="238" width="24" height="24" />
+            </clipPath>
+            <clipPath id="clip3">
+              <rect x="680" y="238" width="24" height="24" />
+            </clipPath>
+          </defs>
+          <g clipPath="url(#clip0)" transform="translate(-680 -237)">
+            <g clipPath="url(#clip1)">
+              <g clipPath="url(#clip2)">
+                <g clipPath="url(#clip3)">
+                  <path
+                    d="M690 242 688 242 688 246 684 246 684 248 690 248ZM688 258 690 258 690 252 684 252 684 254 688 254ZM700 252 694 252 694 258 696 258 696 254 700 254ZM700 246 696 246 696 242 694 242 694 248 700 248Z"
+                    fill="#000000"
+                    fillRule="nonzero"
+                    fillOpacity="1"
+                  />
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </button>
+    );
 
     const toolbar = find(children, (child) =>
       isChildComponentType(child, GraphiQL.Toolbar)
@@ -431,8 +517,8 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
       <GraphiQL.Toolbar>
         <ToolbarButton
           onClick={this.handlePrettifyQuery}
-          title="Prettify Query (Shift-Ctrl-P)"
-          label="Prettify"
+          title="Format Query (Shift-Ctrl-P)"
+          label="Format"
         />
         <ToolbarButton
           onClick={this.handleMergeQuery}
@@ -449,6 +535,11 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
           title="Show History"
           label="History"
         />
+        {this.embeddedGraphiqlDivElement
+          ? this.state.isFullScreen
+            ? createExitFullScreenButton
+            : createFullScreenButton
+          : null}
         {this.props.toolbar?.additionalContent
           ? this.props.toolbar.additionalContent
           : null}
@@ -519,7 +610,6 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
         <div className="editorWrap">
           <div className="topBarWrap">
             <div className="topBar">
-              {logo}
               <ExecuteButton
                 isRunning={Boolean(this.state.subscription)}
                 onRun={this.handleRunQuery}
@@ -528,15 +618,6 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
               />
               {toolbar}
             </div>
-            {!this.state.docExplorerOpen && (
-              <button
-                className="docExplorerShow"
-                onClick={this.handleToggleDocs}
-                aria-label="Open Documentation Explorer"
-              >
-                {"Docs"}
-              </button>
-            )}
           </div>
           <div
             ref={(n) => {
@@ -593,20 +674,6 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
                   >
                     {"Query Variables"}
                   </div>
-                  {this.state.headerEditorEnabled && (
-                    <div
-                      style={{
-                        cursor: "pointer",
-                        color: this.state.headerEditorActive ? "#000" : "gray",
-                        display: "inline-block",
-                        marginLeft: "20px",
-                      }}
-                      onClick={this.handleOpenHeaderEditorTab}
-                      onMouseDown={this.handleTabClickPropogation}
-                    >
-                      {"Request Headers"}
-                    </div>
-                  )}
                 </div>
                 <VariableEditor
                   ref={(n) => {
@@ -1438,6 +1505,26 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     this.setState({ historyPaneOpen: !this.state.historyPaneOpen });
   };
 
+  handleFullScreen = () => {
+    if (this.embeddedGraphiqlDivElement && this.graphiqlDivElement) {
+      this.embeddedGraphiqlDivElement.classList.add("full-screen");
+      this.embeddedGraphiqlDivElement.classList.remove(
+        "embedded-graphiql-container"
+      );
+      this.setState({ isFullScreen: true });
+    }
+  };
+
+  handleExitFullScreen = () => {
+    if (this.embeddedGraphiqlDivElement && this.graphiqlDivElement) {
+      this.embeddedGraphiqlDivElement.classList.remove("full-screen");
+      this.embeddedGraphiqlDivElement.classList.add(
+        "embedded-graphiql-container"
+      );
+      this.setState({ isFullScreen: false });
+    }
+  };
+
   handleSelectHistoryQuery = (
     query?: string,
     variables?: string,
@@ -1603,15 +1690,15 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     downEvent.stopPropagation();
   };
 
-  private handleOpenHeaderEditorTab: MouseEventHandler<HTMLDivElement> = (
-    _clickEvent
-  ) => {
+  /*   private handleOpenHeaderEditorTab: MouseEventHandler<
+    HTMLDivElement
+  > = _clickEvent => {
     this.setState({
       headerEditorActive: true,
       variableEditorActive: false,
       secondaryEditorOpen: true,
     });
-  };
+  }; */
 
   private handleOpenVariableEditorTab: MouseEventHandler<HTMLDivElement> = (
     _clickEvent
