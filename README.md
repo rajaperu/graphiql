@@ -5,7 +5,7 @@
 # GraphQL IDE Monorepo
 
 > **Note:** The primary maintainer @acao is on hiatus until December 2020
-> **Looking for the [GraphiQL Docs?](packages/graphiql/README.md)**: This is the root of the monorepo! The full GraphiQL docs are located at [`packages/graphiql`](packages/graphiql)
+> **Looking for the [GraphiQL Docs?](packages/graphiql-cloudui/README.md)**: This is the root of the monorepo! The full GraphiQL docs are located at [`packages/graphiql`](packages/graphiql-cloudui)
 
 [![Build Status](https://github.com/graphql/graphiql/workflows/Node.JS%20CI/badge.svg)](https://github.com/graphql/graphiql/actions?query=workflow%3A%22Node.JS+CI%22)
 [![Discord](https://img.shields.io/discord/625400653321076807.svg)](https://discord.gg/NP5vbPeUFp)
@@ -44,7 +44,7 @@ As we re-write for `graphiql@2.x` ecosystem, this monorepo will contain an sdk a
 
 ![Diagram of the proposed Monorepo and third party ecosystem](https://raw.githubusercontent.com/graphql/graphiql/main/resources/images/proposed-ecosystem.jpg)
 
-## [GraphiQL](packages/graphiql#readme)
+## [GraphiQL](packages/graphiql-cloudui#readme)
 
 > **Breaking Changes & Improvements:** several interfaces are being dropped for new ones are arriving for GraphiQL 1.0.0! Read more in [this issue](https://github.com/graphql/graphiql/issues/1165)
 
@@ -62,13 +62,13 @@ _/ˈɡrafək(ə)l/_ A graphical interactive in-browser GraphQL IDE. [Try the liv
 
 The GraphiQL IDE, implemented in React, currently using [GraphQL mode for CodeMirror](packages/codemirror-graphql#readme) & [GraphQL Language Service](packages/graphql-language-service#readme).
 
-**Learn more about [GraphiQL in `packages/graphiql/README.md`](packages/graphiql#readme)**
+**Learn more about [GraphiQL in `packages/graphiql/README.md`](packages/graphiql-cloudui#readme)**
 
 ### How To Setup/Implement GraphiQL
 
 [![Edit graphiql-example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/graphiql-js-next-example-qsh7h?file=/src/index.js)
 
-**The [GraphiQL Readme](packages/graphiql#readme) explains** some of the ways to implement GraphiQL, and we also have the [examples](examples) directory as well!
+**The [GraphiQL Readme](packages/graphiql-cloudui#readme) explains** some of the ways to implement GraphiQL, and we also have the [examples](examples) directory as well!
 
 ## [Monaco GraphQL](packages/monaco-graphql#readme)
 

@@ -52,17 +52,18 @@
   /* background: #f7f7f7; */
   align-items: center;
   border-top: 1px solid #d0d0d0;
-  border-bottom: 1px solid #d0d0d0;
   border-left: 1px solid #d0d0d0;
   border-right: 1px solid #d0d0d0;
+  border-bottom: 1px solid #d0d0d0;
   cursor: default;
   display: flex;
   flex-direction: row;
   flex: 1;
-  height: 34px;
+  height: 40px;
   overflow-y: visible;
   padding: 4px;
   user-select: none;
+  border-radius: 5px;
 }
 
 .graphiql-container .toolbar {

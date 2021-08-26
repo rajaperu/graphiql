@@ -1,6 +1,6 @@
 {
   "name": "@rajaperu/graphiql",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "license": "MIT",
   "workspaces": {
@@ -28,18 +28,18 @@
   },
   "scripts": {
     "build": "yarn tsc --clean && yarn tsc",
-    "build-bundles": "yarn prebuild-bundles && yarn workspace graphiql run build-bundles",
-    "build-bundles-clean": "rimraf '{packages,examples,plugins}/**/{bundle,cdn,webpack}' && yarn workspace graphiql run build-bundles-clean",
+    "build-bundles": "yarn prebuild-bundles && yarn workspace graphiql-cloudui run build-bundles",
+    "build-bundles-clean": "rimraf '{packages,examples,plugins}/**/{bundle,cdn,webpack}' && yarn workspace graphiql-cloudui run build-bundles-clean",
     "build-clean": "ws-run build-clean",
     "build-demo": "yarn workspaces run build-demo",
-    "build-docs": "rimraf 'packages/graphiql/typedoc' && typedoc 'packages'",
+    "build-docs": "rimraf 'packages/graphiql-cloudui/typedoc' && typedoc 'packages'",
     "build:clean": "yarn tsc --clean",
     "build:watch": "yarn tsc --watch",
     "check": "flow check --show-all-errors && yarn tsc --dry",
-    "cypress-open": "yarn workspace graphiql cypress-open",
-    "dev-graphiql": "yarn workspace graphiql dev",
-    "e2e": "yarn run e2e:build && yarn workspace graphiql e2e",
-    "e2e:build": "yarn build && yarn workspace graphiql run build-bundles-min",
+    "cypress-open": "yarn workspace graphiql-cloudui cypress-open",
+    "dev-graphiql": "yarn workspace graphiql-cloudui dev",
+    "e2e": "yarn run e2e:build && yarn workspace graphiql-cloudui e2e",
+    "e2e:build": "yarn build && yarn workspace graphiql-cloudui run build-bundles-min",
     "eslint": "eslint --ext=ts,js,jsx,tsx .",
     "format": "yarn eslint --fix && yarn pretty",
     "jest": "jest",
@@ -133,5 +133,8 @@
     "typescript": "^4.1.3",
     "whatwg-url": "^8.4.0",
     "wsrun": "^5.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,15 +1,14 @@
 {
-  "name": "graphiql",
-  "version": "1.4.2",
+  "name": "graphiql-cloudui",
+  "version": "1.0.0",
   "description": "An graphical interactive in-browser GraphQL IDE.",
   "contributors": [
-    "Hyohyeon Jeong <asiandrummer@fb.com>",
-    "Lee Byron <lee@leebyron.com> (http://leebyron.com/)"
+    "Raja Perumal <raja.perumal@yahoo.com>"
   ],
-  "repository": "http://github.com/graphql/graphiql",
-  "homepage": "http://github.com/graphql/graphiql/tree/master/packages/graphiql#readme",
+  "repository": "http://github.com/rajaperu/graphiql",
+  "homepage": "http://github.com/rajaperu/graphiql/tree/master/packages/graphiql-cloudui#readme",
   "bugs": {
-    "url": "https://github.com/graphql/graphiql/issues?q=issue+label:graphiql"
+    "url": "https://github.com/rajaperu/graphiql/issues?q=issue+label:graphiql"
   },
   "license": "MIT",
   "main": "dist/index.js",
@@ -97,5 +96,8 @@
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -269,16 +269,11 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     const headerEditorEnabled = props.headerEditorEnabled ?? false;
     const shouldPersistHeaders = props.shouldPersistHeaders ?? false;
 
-    let isFullScreenOn = false;
+    const isFullScreenOn = false;
     // Check if the window is already in full screen mode
     this.embeddedGraphiqlDivElement = document.getElementById(
       "embedded-graphiql-container"
     );
-    this.graphiqlDivElement = document.getElementById("graphiql");
-    if (this.embeddedGraphiqlDivElement && this.graphiqlDivElement) {
-      const graphiqlDivElementHeight = this.graphiqlDivElement.style.height;
-      isFullScreenOn = graphiqlDivElementHeight.indexOf("100") ? true : false;
-    }
 
     // Initialize state
     this.state = {
@@ -1506,7 +1501,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
   };
 
   handleFullScreen = () => {
-    if (this.embeddedGraphiqlDivElement && this.graphiqlDivElement) {
+    if (this.embeddedGraphiqlDivElement) {
       this.embeddedGraphiqlDivElement.classList.add("full-screen");
       this.embeddedGraphiqlDivElement.classList.remove(
         "embedded-graphiql-container"
@@ -1516,7 +1511,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
   };
 
   handleExitFullScreen = () => {
-    if (this.embeddedGraphiqlDivElement && this.graphiqlDivElement) {
+    if (this.embeddedGraphiqlDivElement) {
       this.embeddedGraphiqlDivElement.classList.remove("full-screen");
       this.embeddedGraphiqlDivElement.classList.add(
         "embedded-graphiql-container"
