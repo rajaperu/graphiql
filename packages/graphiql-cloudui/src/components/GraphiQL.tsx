@@ -270,7 +270,6 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     const shouldPersistHeaders = props.shouldPersistHeaders ?? false;
 
     const isFullScreenOn = false;
-    // Check if the window is already in full screen mode
     this.embeddedGraphiqlDivElement = document.getElementById(
       "embedded-graphiql-container"
     );
@@ -506,6 +505,21 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
       </button>
     );
 
+    const fullScreenButtonElement = (): JSX.Element => {
+      this.embeddedGraphiqlDivElement = document.getElementById(
+        "embedded-graphiql-container"
+      );
+      return (
+        <>
+          {this.embeddedGraphiqlDivElement
+            ? this.state.isFullScreen
+              ? createExitFullScreenButton
+              : createFullScreenButton
+            : null}
+        </>
+      );
+    };
+
     const toolbar = find(children, (child) =>
       isChildComponentType(child, GraphiQL.Toolbar)
     ) || (
@@ -530,11 +544,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
           title="Show History"
           label="History"
         />
-        {this.embeddedGraphiqlDivElement
-          ? this.state.isFullScreen
-            ? createExitFullScreenButton
-            : createFullScreenButton
-          : null}
+        {fullScreenButtonElement()}
         {this.props.toolbar?.additionalContent
           ? this.props.toolbar.additionalContent
           : null}

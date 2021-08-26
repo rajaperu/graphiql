@@ -63,7 +63,6 @@
   overflow-y: visible;
   padding: 4px;
   user-select: none;
-  border-radius: 5px;
 }
 
 .graphiql-container .toolbar {

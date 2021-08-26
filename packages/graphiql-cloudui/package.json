@@ -1,6 +1,6 @@
 {
   "name": "graphiql-cloudui",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "An graphical interactive in-browser GraphQL IDE.",
   "contributors": [
     "Raja Perumal <raja.perumal@yahoo.com>"
